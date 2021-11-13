@@ -16,7 +16,10 @@ std::vector<Command> CommandReader::nextCommands() {
     _line++;
     try {
       uint32_t index = std::stoul(str);
-      commands.push_back({index});
+      if (index == 0) {
+          throw std::exception();
+      }
+      commands.push_back({index - 1});
     } catch (std::exception const &ex) {
       std::cout << "Reader: Invalid index at line " << _line << "in file "
                 << _config << std::endl;

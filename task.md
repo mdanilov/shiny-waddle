@@ -111,8 +111,8 @@ Cache 4 Readers Writers Items
 
 Reader1 will output Reader1.out.txt
 ```
-0 or 100 Disk (depending on if reader1 reads first or writer1 writes first) -33
-Disk
+0 or 100 Disk (depending on if reader1 reads first or writer1 writes first)
+-33 Disk
 75.2 or 500 Disk
 90.0 Disk
 0 or 100 Cache

@@ -32,13 +32,16 @@ std::vector<Command> CommandReader::nextCommands() {
     uint32_t index = 0U;
     try {
       index = std::stoul(tokens[0]);
+      if (index == 0) {
+        throw std::exception();
+      }
     } catch (std::exception const &ex) {
       std::cout << "Writer: Invalid index at line " << _line << "in file "
                 << _config << std::endl;
       continue;
     }
 
-    commands.push_back({index, tokens[1]});
+    commands.push_back({index - 1, tokens[1]});
   }
   return commands;
 }

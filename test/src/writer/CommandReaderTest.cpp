@@ -9,11 +9,9 @@ TEST(WriterCommandReaderTest, basic) {
   reader.open();
   std::vector<writer::Command> commands = reader.nextCommands();
   EXPECT_EQ(commands.size(), 5);
-  uint32_t test_index = 1U;
   for (size_t i = 0; i < commands.size(); i++) {
-    EXPECT_EQ(commands[i].index, test_index);
-    EXPECT_EQ(commands[i].value, std::to_string(test_index * 100));
-    test_index++;
+    EXPECT_EQ(commands[i].index, i);
+    EXPECT_EQ(commands[i].value, std::to_string((i + 1) * 100));
   }
 
   commands = reader.nextCommands();
@@ -29,18 +27,16 @@ TEST(WriterCommandReaderTest, chunk_read) {
   reader.open();
   std::vector<writer::Command> commands = reader.nextCommands();
   ASSERT_EQ(commands.size(), 3);
-  uint32_t test_index = 1U;
   for (size_t i = 0; i < commands.size(); i++) {
-    EXPECT_EQ(commands[i].index, test_index);
-    EXPECT_EQ(commands[i].value, std::to_string(test_index * 100));
-    test_index++;
+    EXPECT_EQ(commands[i].index, i);
+    EXPECT_EQ(commands[i].value, std::to_string((i + 1) * 100));
   }
 
   commands = reader.nextCommands();
   ASSERT_EQ(commands.size(), 2);
-  EXPECT_EQ(commands[0].index, 4);
+  EXPECT_EQ(commands[0].index, 3);
   EXPECT_EQ(commands[0].value, std::to_string(400));
-  EXPECT_EQ(commands[1].index, 5);
+  EXPECT_EQ(commands[1].index, 4);
   EXPECT_EQ(commands[1].value, std::to_string(500));
 
   reader.close();

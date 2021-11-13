@@ -27,6 +27,7 @@ int main(int argc, char **argv) {
   try {
     executor::System system(cache_size, reader_config, writer_config,
                             items_file);
+    system.exec();
   } catch (std::exception const &ex) {
     std::cout << "System error: " << ex.what() << std::endl;
     exit(EXIT_FAILURE);

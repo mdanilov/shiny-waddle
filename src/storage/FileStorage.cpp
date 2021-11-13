@@ -46,6 +46,7 @@ void FileStorage::writeByIndex(Index index, const Value &val) {
       str = val;
     }
     str += "\n";
+    cur++;
     out << str;
   }
 

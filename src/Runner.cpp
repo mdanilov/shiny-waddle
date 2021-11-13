@@ -18,6 +18,7 @@ void Runner::waitAllFinished() {
   for (auto it = _threads.begin(); it != _threads.end(); ++it) {
     it->join();
   }
+  _running = false;
 }
 
 } // namespace executor

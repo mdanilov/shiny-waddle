@@ -2,13 +2,13 @@
 #define GUARD_D3422719_5A20_4D8B_A50A_B9DB034B2878
 
 #include "Runner.h"
-#include "reader/Reader.h"
 #include "reader/CommandReader.h"
+#include "reader/Reader.h"
 #include "storage/FileStorage.h"
 #include "storage/IStorage.h"
-#include "storage/StorageWithLRUCache.h"
-#include "writer/Writer.h"
+#include "storage/LRUCache.h"
 #include "writer/CommandReader.h"
+#include "writer/Writer.h"
 
 #include <memory>
 #include <vector>
@@ -30,7 +30,7 @@ private:
   std::vector<std::shared_ptr<writer::Writer>> _writers;
 
   storage::FileStorage _file_storage;
-  storage::StorageWithLRUCache _cache;
+  storage::LRUCache _cache;
 
   Runner _runner;
 };

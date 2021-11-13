@@ -11,9 +11,9 @@
 
 namespace storage {
 
-class StorageWithLRUCache : public IStorage {
+class LRUCache : public IStorage {
 public:
-  StorageWithLRUCache(IStorage &storage, uint32_t cache_size)
+  LRUCache(IStorage &storage, uint32_t cache_size)
       : _storage(storage), _cache_size(cache_size) {}
 
   ReadResult readByIndex(Index index) override;

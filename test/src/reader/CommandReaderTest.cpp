@@ -9,10 +9,8 @@ TEST(ReaderCommandReaderTest, basic) {
   reader.open();
   std::vector<reader::Command> commands = reader.nextCommands();
   EXPECT_EQ(commands.size(), 4);
-  uint32_t test_index = 1U;
   for (size_t i = 0; i < commands.size(); i++) {
-    EXPECT_EQ(commands[i].index, test_index);
-    test_index++;
+    EXPECT_EQ(commands[i].index, i);
   }
 
   commands = reader.nextCommands();
@@ -28,15 +26,13 @@ TEST(ReaderCommandReaderTest, chunk_read) {
   reader.open();
   std::vector<reader::Command> commands = reader.nextCommands();
   ASSERT_EQ(commands.size(), 3);
-  uint32_t test_index = 1U;
   for (size_t i = 0; i < commands.size(); i++) {
-    EXPECT_EQ(commands[i].index, test_index);
-    test_index++;
+    EXPECT_EQ(commands[i].index, i);
   }
 
   commands = reader.nextCommands();
   ASSERT_EQ(commands.size(), 1);
-  EXPECT_EQ(commands[0].index, 4);
+  EXPECT_EQ(commands[0].index, 3);
 
   reader.close();
 }

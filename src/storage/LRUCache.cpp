@@ -1,4 +1,4 @@
-#include "storage/StorageWithLRUCache.h"
+#include "storage/LRUCache.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -7,14 +7,14 @@
 #include <unordered_map>
 
 namespace storage {
-void StorageWithLRUCache::updateLRU(Index index) {
+void LRUCache::updateLRU(Index index) {
   auto it = std::find(_lru.begin(), _lru.end(), index);
   if (it != _lru.end()) {
     _lru.splice(_lru.begin(), _lru, it);
   }
 }
 
-ReadResult StorageWithLRUCache::readByIndex(Index index) {
+ReadResult LRUCache::readByIndex(Index index) {
   {
     std::shared_lock<std::shared_timed_mutex> lock(_mutex);
 
@@ -39,12 +39,13 @@ ReadResult StorageWithLRUCache::readByIndex(Index index) {
     }
 
     _cache[index] = val;
+    _lru.push_front(index);
   }
 
   return {val, true};
 }
 
-void StorageWithLRUCache::writeByIndex(Index index, const Value &val) {
+void LRUCache::writeByIndex(Index index, const Value &val) {
   {
     std::unique_lock<std::shared_timed_mutex> lock(_mutex);
 
