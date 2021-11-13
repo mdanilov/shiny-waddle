@@ -9,10 +9,20 @@ namespace storage {
 using Index = uint32_t;
 using Value = std::string;
 
+/**
+ * \brief Result of the read from storage
+ *
+ */
 struct ReadResult {
   Value value;
   bool cache_miss;
 
+  /**
+   * \brief Construct a new Read Result object
+   *
+   * @param val read value
+   * @param cache_miss true if there was a cache miss, false otherwise
+   */
   ReadResult(const Value &val, bool cache_miss = true)
       : value(val), cache_miss(cache_miss) {}
 };

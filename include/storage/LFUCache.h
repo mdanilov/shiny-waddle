@@ -11,14 +11,47 @@
 #include "StorageTypes.h"
 
 namespace storage {
-
+/**
+ * \brief Adds LFU cache to the storage.
+ *
+ * Implements Least Frequently Used (LFU) algorithm.
+ *
+ * Thread-safe implementation.
+ *
+ */
 class LFUCache : public IStorage {
 public:
+  /**
+   * \brief Construct a new LFUCache object
+   *
+   * @param storage reference to storage the access to which will be cached.
+   * @param cache_size the max cache capacity
+   */
   LFUCache(IStorage &storage, uint32_t capacity)
       : _storage(storage), _capacity(capacity) {}
 
+  /**
+   * \brief Read from underlying storage in case of cache miss. Otherwise take
+   * value form the cache.
+   *
+   * Increment the frequency counter of accessed element.
+   *
+   * Updates the cache with new element if the counter of accessed element is
+   * greater than the counter of the LFU element from the cache. The LFU element
+   * is removed from the cache.
+   *
+   * @param index read key
+   * @return ReadResult contains the true cache miss information.
+   */
   ReadResult readByIndex(Index index) override;
 
+  /**
+   * \brief Writes new value. Updates value in cache if exists.
+   * It always writes to the underlying storage.
+   *
+   * @param index write key
+   * @param val new value
+   */
   void writeByIndex(Index index, const Value &val) override;
 
 private:
