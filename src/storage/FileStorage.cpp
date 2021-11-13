@@ -56,11 +56,11 @@ void FileStorage::writeByIndex(Index index, const Value &val) {
     return;
   }
 
-  if (!std::remove(_file.c_str())) {
+  if (std::remove(_file.c_str()) != 0) {
     std::cout << "Writer: Error while removing the file " << _file << std::endl;
   }
 
-  if (!std::rename(temp_name.c_str(), _file.c_str())) {
+  if (std::rename(temp_name.c_str(), _file.c_str()) != 0) {
     std::cout << "Writer: Error while renaming the file " << temp_name
               << std::endl;
   };

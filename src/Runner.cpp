@@ -9,7 +9,7 @@ void Runner::runAll() {
 
   _running = true;
   for (auto it = _runnables.begin(); it != _runnables.end(); ++it) {
-    auto t = std::thread(&IRunnable::execute, (*it));
+    auto t = std::thread(&IRunnable::execute, *it);
     _threads.push_back(std::move(t));
   }
 }

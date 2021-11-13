@@ -23,10 +23,10 @@ public:
   void exec();
 
 private:
-  std::vector<reader::CommandReader> _rCommandReaders;
+  std::vector<std::shared_ptr<reader::CommandReader>> _r_command_readers;
   std::vector<std::shared_ptr<reader::Reader>> _readers;
 
-  std::vector<writer::CommandReader> _wCommandReaders;
+  std::vector<std::shared_ptr<writer::CommandReader>> _w_command_readers;
   std::vector<std::shared_ptr<writer::Writer>> _writers;
 
   storage::FileStorage _file_storage;

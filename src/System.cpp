@@ -22,17 +22,19 @@ System::System(uint32_t cache_size, const std::string &readers_config,
   std::string str;
 
   while (std::getline(readers_input, str)) {
-    _rCommandReaders.emplace_back(str);
-    auto reader = std::make_shared<reader::Reader>(
-        _cache, _rCommandReaders.back(), str + ".out");
+    auto command_reader = std::make_shared<reader::CommandReader>(str);
+    _r_command_readers.push_back(command_reader);
+    auto reader =
+        std::make_shared<reader::Reader>(_cache, *command_reader, str + ".out");
+    reader->execute();
     _readers.push_back(reader);
     _runner.addRunnable(reader);
   }
 
   while (std::getline(writers_input, str)) {
-    _wCommandReaders.emplace_back(str);
-    auto writer =
-        std::make_shared<writer::Writer>(_cache, _wCommandReaders.back());
+    auto command_reader = std::make_shared<writer::CommandReader>(str);
+    _w_command_readers.push_back(command_reader);
+    auto writer = std::make_shared<writer::Writer>(_cache, *command_reader);
     _writers.push_back(writer);
     _runner.addRunnable(writer);
   }

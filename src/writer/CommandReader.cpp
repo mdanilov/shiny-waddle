@@ -47,4 +47,4 @@ std::vector<Command> CommandReader::nextCommands() {
 }
 
 void CommandReader::close() { _stream.close(); }
-}
+} // namespace writer

@@ -17,7 +17,7 @@ std::vector<Command> CommandReader::nextCommands() {
     try {
       uint32_t index = std::stoul(str);
       if (index == 0) {
-          throw std::exception();
+        throw std::exception();
       }
       commands.push_back({index - 1});
     } catch (std::exception const &ex) {
