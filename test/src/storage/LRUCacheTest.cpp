@@ -82,11 +82,17 @@ TEST(LRUCacheTest, write_and_read) {
   StorageMock storageMock;
   LRUCache cache(storageMock, CACHE_SIZE);
 
+  EXPECT_CALL(storageMock, readByIndex(1))
+      .WillOnce(Return(ReadResult{"1", true}));
+  ReadResult result = cache.readByIndex(1);
+  EXPECT_EQ(result.value, "1");
+  EXPECT_EQ(result.cache_miss, true);
+
   EXPECT_CALL(storageMock, writeByIndex(1, "100")).Times(1);
   cache.writeByIndex(1, "100");
 
   EXPECT_CALL(storageMock, readByIndex(_)).Times(0);
-  ReadResult result = cache.readByIndex(1);
+  result = cache.readByIndex(1);
   EXPECT_EQ(result.value, "100");
   EXPECT_EQ(result.cache_miss, false);
 }

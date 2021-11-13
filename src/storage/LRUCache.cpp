@@ -55,11 +55,8 @@ void LRUCache::writeByIndex(Index index, const Value &val) {
 
     auto it = _cache.find(index);
     if (it != _cache.end()) {
-      // cache hit, update the value in cache
-      updateLRU(index);
+      // update the value in cache
       _cache[index] = val;
-    } else {
-      cache(index, val);
     }
   }
 
