@@ -6,7 +6,7 @@
 #include "reader/Reader.h"
 #include "storage/FileStorage.h"
 #include "storage/IStorage.h"
-#include "storage/LRUCache.h"
+#include "storage/LFUCache.h"
 #include "writer/CommandReader.h"
 #include "writer/Writer.h"
 
@@ -30,7 +30,7 @@ private:
   std::vector<std::shared_ptr<writer::Writer>> _writers;
 
   storage::FileStorage _file_storage;
-  storage::LRUCache _cache;
+  storage::LFUCache _cache;
 
   Runner _runner;
 };
