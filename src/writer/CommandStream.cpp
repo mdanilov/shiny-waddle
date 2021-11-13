@@ -1,4 +1,4 @@
-#include "writer/CommandReader.h"
+#include "writer/CommandStream.h"
 
 #include <iostream>
 #include <iterator>
@@ -6,7 +6,7 @@
 
 namespace writer {
 
-void CommandReader::open() {
+void CommandStream::open() {
   _stream.open(_config, std::ifstream::in);
   if (!_stream) {
     throw std::runtime_error("Error opening command config file " + _config);
@@ -14,7 +14,7 @@ void CommandReader::open() {
   _line = 0U;
 }
 
-std::vector<Command> CommandReader::nextCommands() {
+std::vector<Command> CommandStream::getCommands() {
   std::vector<Command> commands;
   if (!_stream) {
     return commands;
@@ -50,5 +50,5 @@ std::vector<Command> CommandReader::nextCommands() {
   return commands;
 }
 
-void CommandReader::close() { _stream.close(); }
+void CommandStream::close() { _stream.close(); }
 } // namespace writer

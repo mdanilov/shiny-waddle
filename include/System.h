@@ -2,12 +2,12 @@
 #define GUARD_D3422719_5A20_4D8B_A50A_B9DB034B2878
 
 #include "Runner.h"
-#include "reader/CommandReader.h"
+#include "reader/CommandStream.h"
 #include "reader/Reader.h"
 #include "storage/FileStorage.h"
 #include "storage/IStorage.h"
 #include "storage/LFUCache.h"
-#include "writer/CommandReader.h"
+#include "writer/CommandStream.h"
 #include "writer/Writer.h"
 
 #include <memory>
@@ -44,10 +44,10 @@ public:
   void exec();
 
 private:
-  std::vector<std::shared_ptr<reader::CommandReader>> _r_command_readers;
+  std::vector<std::shared_ptr<reader::CommandStream>> _r_command_readers;
   std::vector<std::shared_ptr<reader::Reader>> _readers;
 
-  std::vector<std::shared_ptr<writer::CommandReader>> _w_command_readers;
+  std::vector<std::shared_ptr<writer::CommandStream>> _w_command_readers;
   std::vector<std::shared_ptr<writer::Writer>> _writers;
 
   storage::FileStorage _file_storage;

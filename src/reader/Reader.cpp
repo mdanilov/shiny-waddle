@@ -15,7 +15,7 @@ void Reader::execute() {
   }
 
   _commandReader.open();
-  std::vector<Command> commands = _commandReader.nextCommands();
+  std::vector<Command> commands = _commandReader.getCommands();
   while (commands.size() > 0) {
     for (size_t i = 0; i < commands.size(); ++i) {
       Command &command = commands[i];
@@ -23,7 +23,7 @@ void Reader::execute() {
       out << res.value << " " << (res.cache_miss ? "Disk" : "Cache")
           << std::endl;
     }
-    commands = _commandReader.nextCommands();
+    commands = _commandReader.getCommands();
   }
   _commandReader.close();
 }

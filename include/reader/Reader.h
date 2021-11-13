@@ -1,8 +1,9 @@
 #ifndef GUARD_DE08D5CA_51E6_47E0_BCD2_F76F14CA9267
 #define GUARD_DE08D5CA_51E6_47E0_BCD2_F76F14CA9267
 
-#include "ICommandReader.h"
+#include "Command.h"
 #include "IRunnable.h"
+#include "command/ICommandStream.h"
 #include "storage/IStorage.h"
 
 #include <fstream>
@@ -24,8 +25,8 @@ public:
    * @param cmdReader reader command reader
    * @param output path to the output file
    */
-  Reader(storage::IStorage &storage, ICommandReader &cmdReader,
-         const std::string &output)
+  Reader(storage::IStorage &storage,
+         command::ICommandStream<Command> &cmdReader, const std::string &output)
       : _storage(storage), _commandReader(cmdReader), _output(output){};
 
   /**
@@ -36,7 +37,7 @@ public:
 
 private:
   storage::IStorage &_storage;
-  ICommandReader &_commandReader;
+  command::ICommandStream<Command> &_commandReader;
   std::string _output;
 };
 } // namespace reader

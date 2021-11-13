@@ -3,18 +3,18 @@
 
 #include <gmock/gmock.h>
 
-#include "reader/ICommandReader.h"
-
+#include "command/ICommandStream.h"
+#include "reader/Command.h"
 
 #include <vector>
 
 namespace reader {
 
-class CommandReaderMock : public ICommandReader {
+class CommandStreamMock : public command::ICommandStream<Command> {
 public:
   MOCK_METHOD0(open, void());
   MOCK_METHOD0(close, void());
-  MOCK_METHOD0(nextCommands, std::vector<Command>());
+  MOCK_METHOD0(getCommands, std::vector<Command>());
 };
 } // namespace reader
 

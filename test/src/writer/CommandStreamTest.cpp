@@ -1,38 +1,38 @@
 #include <gtest/gtest.h>
 
-#include "writer/CommandReader.h"
+#include "writer/CommandStream.h"
 
-TEST(WriterCommandReaderTest, basic) {
+TEST(WriterCommandStreamTest, basic) {
   std::string test_file("writer/CommandReaderTest.txt");
 
-  writer::CommandReader reader(test_file);
+  writer::CommandStream reader(test_file);
   reader.open();
-  std::vector<writer::Command> commands = reader.nextCommands();
+  std::vector<writer::Command> commands = reader.getCommands();
   EXPECT_EQ(commands.size(), 5);
   for (size_t i = 0; i < commands.size(); i++) {
     EXPECT_EQ(commands[i].index, i);
     EXPECT_EQ(commands[i].value, std::to_string((i + 1) * 100));
   }
 
-  commands = reader.nextCommands();
+  commands = reader.getCommands();
   EXPECT_EQ(commands.size(), 0);
 
   reader.close();
 }
 
-TEST(WriterCommandReaderTest, chunk_read) {
+TEST(WriterCommandStreamTest, chunk_read) {
   std::string test_file("writer/CommandReaderTest.txt");
 
-  writer::CommandReader reader(test_file, 3);
+  writer::CommandStream reader(test_file, 3);
   reader.open();
-  std::vector<writer::Command> commands = reader.nextCommands();
+  std::vector<writer::Command> commands = reader.getCommands();
   ASSERT_EQ(commands.size(), 3);
   for (size_t i = 0; i < commands.size(); i++) {
     EXPECT_EQ(commands[i].index, i);
     EXPECT_EQ(commands[i].value, std::to_string((i + 1) * 100));
   }
 
-  commands = reader.nextCommands();
+  commands = reader.getCommands();
   ASSERT_EQ(commands.size(), 2);
   EXPECT_EQ(commands[0].index, 3);
   EXPECT_EQ(commands[0].value, std::to_string(400));

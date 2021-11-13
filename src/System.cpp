@@ -22,7 +22,7 @@ System::System(uint32_t cache_size, const std::string &readers_config,
   std::string str;
 
   while (std::getline(readers_input, str)) {
-    auto command_reader = std::make_shared<reader::CommandReader>(str);
+    auto command_reader = std::make_shared<reader::CommandStream>(str);
     _r_command_readers.push_back(command_reader);
     auto reader =
         std::make_shared<reader::Reader>(_cache, *command_reader, str + ".out");
@@ -31,7 +31,7 @@ System::System(uint32_t cache_size, const std::string &readers_config,
   }
 
   while (std::getline(writers_input, str)) {
-    auto command_reader = std::make_shared<writer::CommandReader>(str);
+    auto command_reader = std::make_shared<writer::CommandStream>(str);
     _w_command_readers.push_back(command_reader);
     auto writer = std::make_shared<writer::Writer>(_cache, *command_reader);
     _writers.push_back(writer);

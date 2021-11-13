@@ -2,7 +2,7 @@
 #define GUARD_F6A3E6AA_21F5_4990_85BA_9BE13E67CE35
 
 #include "Command.h"
-#include "ICommandReader.h"
+#include "command/ICommandStream.h"
 
 #include <fstream>
 #include <iostream>
@@ -11,7 +11,7 @@
 
 namespace reader {
 /**
- * \brief The CommandReader implements the reading of the Reader commands from
+ * \brief The CommandStream implements the reading of the Reader commands from
  * the configuration text file.
  *
  * Each line of the text file should contains 1-based index number.
@@ -26,7 +26,7 @@ namespace reader {
  * of the lines to read in the ctr. By default all commands are read.
  *
  */
-class CommandReader : public ICommandReader {
+class CommandStream : public command::ICommandStream<Command> {
 public:
   static const uint32_t READ_ALL_COMMANDS = 0xFFFFFFFFU;
 
@@ -36,7 +36,7 @@ public:
    * @param file path to the configuration file
    * @param bufferSize max number of the commands that can be read per step.
    */
-  explicit CommandReader(std::string &file,
+  explicit CommandStream(std::string &file,
                          uint32_t bufferSize = READ_ALL_COMMANDS)
       : _config(file), _bufferSize(bufferSize), _line(0U) {}
 
@@ -58,7 +58,7 @@ public:
    *
    * @return std::vector<Command> parsed reader commands
    */
-  std::vector<Command> nextCommands() override;
+  std::vector<Command> getCommands() override;
 
   /**
    * \brief Close the file stream.

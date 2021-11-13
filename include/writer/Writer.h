@@ -1,8 +1,9 @@
 #ifndef GUARD_CCBD496C_BEAB_41F9_AF09_5E8E5E8855A2
 #define GUARD_CCBD496C_BEAB_41F9_AF09_5E8E5E8855A2
 
-#include "ICommandReader.h"
+#include "Command.h"
 #include "IRunnable.h"
+#include "command/ICommandStream.h"
 #include "storage/IStorage.h"
 
 #include <string>
@@ -21,7 +22,8 @@ public:
    * @param storage reference to the storage
    * @param cmdReader reader command reader
    */
-  Writer(storage::IStorage &storage, ICommandReader &cmdReader)
+  Writer(storage::IStorage &storage,
+         command::ICommandStream<Command> &cmdReader)
       : _storage(storage), _commandReader(cmdReader){};
 
   /**
@@ -32,7 +34,7 @@ public:
 
 private:
   storage::IStorage &_storage;
-  ICommandReader &_commandReader;
+  command::ICommandStream<Command> &_commandReader;
 };
 } // namespace writer
 
