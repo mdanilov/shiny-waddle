@@ -1,3 +1,0 @@
-1 Cache
-2 Disk
-2 Cache

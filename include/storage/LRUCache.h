@@ -22,6 +22,7 @@ public:
 
 private:
   void updateLRU(Index index);
+  void cache(Index index, const Value& val);
 
   IStorage &_storage;
   uint32_t _cache_size;
