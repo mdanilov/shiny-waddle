@@ -26,7 +26,6 @@ System::System(uint32_t cache_size, const std::string &readers_config,
     _r_command_readers.push_back(command_reader);
     auto reader =
         std::make_shared<reader::Reader>(_cache, *command_reader, str + ".out");
-    reader->execute();
     _readers.push_back(reader);
     _runner.addRunnable(reader);
   }

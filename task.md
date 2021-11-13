@@ -95,7 +95,8 @@ contents of items_file:
 23.5
 -33
 
-75.245
+75.2
+45
 90.0
 100
 8
@@ -139,3 +140,4 @@ and Writer1).
 ```
 
 Enunciate your design considerations, for cache when your program is read heavy vs write heavy.
+

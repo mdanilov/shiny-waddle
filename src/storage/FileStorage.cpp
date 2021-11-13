@@ -41,7 +41,7 @@ void FileStorage::writeByIndex(Index index, const Value &val) {
 
   std::string str;
   Index cur = 0U;
-  while (in >> str) {
+  while (std::getline(in, str)) {
     if (cur == index) {
       str = val;
     }

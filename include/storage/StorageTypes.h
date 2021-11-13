@@ -11,9 +11,9 @@ using Value = std::string;
 
 struct ReadResult {
   Value value;
-  bool cache_miss = false;
+  bool cache_miss;
 
-  ReadResult(const Value &val, bool cache_miss = false)
+  ReadResult(const Value &val, bool cache_miss = true)
       : value(val), cache_miss(cache_miss) {}
 };
 } // namespace storage
