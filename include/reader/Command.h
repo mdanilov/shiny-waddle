@@ -4,6 +4,10 @@
 #include <cstdint>
 
 namespace reader {
+/**
+ * \brief Reader command. Contains instructions for the reader.
+ *
+ */
 struct Command {
   uint32_t index;
 };

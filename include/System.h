@@ -15,11 +15,32 @@
 
 namespace executor {
 
+/**
+ * \brief Application main facade. Creates and own all objects required to run
+ * the program.
+ *
+ */
 class System {
 public:
+  /**
+   * \brief Construct a new System object. Reads the readers and writers
+   * configurations and constructs the objects accordingly.
+   *
+   * @throws std::exception if the configuration is invalid or cannot be read
+   *
+   * @param cache_size max cache capacity
+   * @param readers_config path to the readers config
+   * @param writers_config path to the writers config
+   * @param items_file path to the database file
+   */
   System(uint32_t cache_size, const std::string &readers_config,
          const std::string &writers_config, const std::string &items_file);
 
+  /**
+   * \brief Starts the program execution. Invoke all writer/reader runnables and
+   * wait until the end of the execution.
+   *
+   */
   void exec();
 
 private:

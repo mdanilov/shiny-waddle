@@ -6,12 +6,30 @@
 #include <vector>
 
 namespace writer {
+/**
+ * \brief ICommandReader interface. Used by the Writer to read the commands
+ *
+ */
 class ICommandReader {
 public:
+  /**
+   * \brief Open commands stream for reading.
+   *
+   */
   virtual void open() = 0;
 
+  /**
+   * \brief Requests the next commands.
+   *
+   * @return std::vector<Command> new commands, can be empty if there are no
+   * more commands.
+   */
   virtual std::vector<Command> nextCommands() = 0;
 
+  /**
+   * \brief Close command stream.
+   *
+   */
   virtual void close() = 0;
 };
 }

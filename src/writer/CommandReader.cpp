@@ -16,6 +16,10 @@ void CommandReader::open() {
 
 std::vector<Command> CommandReader::nextCommands() {
   std::vector<Command> commands;
+  if (!_stream) {
+    return commands;
+  }
+
   std::string str;
   while (commands.size() < _bufferSize && std::getline(_stream, str)) {
     _line++;

@@ -3,8 +3,17 @@
 
 namespace executor {
 
+/**
+ * \brief Simple runnable interface. The class has to implement this interafce
+ * if wants to be added as runnable to the Runner.
+ *
+ */
 class IRunnable {
 public:
+  /**
+   * \brief Can be called by the runner when scheduled
+   *
+   */
   virtual void execute() = 0;
 };
 } // namespace executor

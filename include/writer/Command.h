@@ -5,6 +5,10 @@
 #include <string>
 
 namespace writer {
+/**
+ * \brief Writer command. Contains instructions for the writer.
+ *
+ */
 struct Command {
   uint32_t index;
   std::string value;

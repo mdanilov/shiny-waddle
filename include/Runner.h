@@ -10,18 +10,44 @@
 
 namespace executor {
 
+/**
+ * \brief Responsible for runnables execution and thread management.
+ *
+ */
 class Runner {
 public:
   Runner() : _running(false) {}
 
+  /**
+   * \brief Add new runnable to the list of the runnables that will be executed
+   * by calling the runAll method.
+   *
+   * @param runnable pointer to the runnable object
+   */
   void addRunnable(std::shared_ptr<IRunnable> runnable) {
     _runnables.push_back(runnable);
   }
 
+  /**
+   * \brief Executes all runnables in parallel. New thread is created for each
+   * runnable. Change the state to the running.
+   *
+   */
   void runAll();
 
+  /**
+   * \brief Wait until all runnables are finished their execution. Basically
+   * joins on created threads. The state switched to not running at the end.
+   *
+   */
   void waitAllFinished();
 
+  /**
+   * \brief Returns current state
+   *
+   * @return true already running
+   * @return false not running
+   */
   bool isRunning() { return _running; }
 
 private:

@@ -42,6 +42,12 @@ It also builds first and clean-up the workspace from the files of previous runs.
 ./run_example.sh
 ```
 
+## Generate documentation
+The documentation can be generated using the `Doxygen` command. The output will be in the `doc` folder.
+```
+doxygen
+```
+
 ## Requirements analysis
 - Statement `Design and implement an efficient eviction mechanism when there is a cache miss.` is unclear.
   The efficient eviction mechanism is depend on the applied use case, which is not specified. So it's not possible
