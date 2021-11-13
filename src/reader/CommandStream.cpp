@@ -1,36 +1,14 @@
 #include "reader/CommandStream.h"
 
 namespace reader {
-void CommandStream::open() {
-  _stream.open(_config, std::ifstream::in);
-  if (!_stream) {
-    throw std::runtime_error("Error opening command config file " + _config);
+
+Command CommandStream::parse(const std::string &str) {
+  Command command;
+  uint32_t index = std::stoul(str);
+  if (index == 0) {
+    throw std::exception();
   }
-  _line = 0U;
+  command.index = index - 1;
+  return command;
 }
-
-std::vector<Command> CommandStream::getCommands() {
-  std::vector<Command> commands;
-  if (!_stream) {
-    return commands;
-  }
-
-  std::string str;
-  while (commands.size() < _bufferSize && std::getline(_stream, str)) {
-    _line++;
-    try {
-      uint32_t index = std::stoul(str);
-      if (index == 0) {
-        throw std::exception();
-      }
-      commands.push_back({index - 1});
-    } catch (std::exception const &ex) {
-      std::cout << "Reader: Invalid index at line " << _line << "in file "
-                << _config << std::endl;
-    }
-  }
-  return commands;
-}
-
-void CommandStream::close() { _stream.close(); }
 } // namespace reader

@@ -6,49 +6,23 @@
 
 namespace writer {
 
-void CommandStream::open() {
-  _stream.open(_config, std::ifstream::in);
-  if (!_stream) {
-    throw std::runtime_error("Error opening command config file " + _config);
+Command CommandStream::parse(const std::string &str) {
+  Command command;
+  std::vector<std::string> tokens;
+  std::istringstream iss(str);
+  std::copy(std::istream_iterator<std::string>(iss),
+            std::istream_iterator<std::string>(), std::back_inserter(tokens));
+  if (tokens.size() != 2) {
+    throw std::exception();
   }
-  _line = 0U;
+  uint32_t index = 0U;
+  index = std::stoul(tokens[0]);
+  if (index == 0) {
+    throw std::exception();
+  }
+  command.index = index - 1;
+  command.value = tokens[1];
+  return command;
 }
 
-std::vector<Command> CommandStream::getCommands() {
-  std::vector<Command> commands;
-  if (!_stream) {
-    return commands;
-  }
-
-  std::string str;
-  while (commands.size() < _bufferSize && std::getline(_stream, str)) {
-    _line++;
-    std::vector<std::string> tokens;
-    std::istringstream iss(str);
-    std::copy(std::istream_iterator<std::string>(iss),
-              std::istream_iterator<std::string>(), std::back_inserter(tokens));
-    if (tokens.size() != 2) {
-      std::cout << "Writer: Wrong command at line " << _line << "in file "
-                << _config << std::endl;
-      continue;
-    }
-
-    uint32_t index = 0U;
-    try {
-      index = std::stoul(tokens[0]);
-      if (index == 0) {
-        throw std::exception();
-      }
-    } catch (std::exception const &ex) {
-      std::cout << "Writer: Invalid index at line " << _line << "in file "
-                << _config << std::endl;
-      continue;
-    }
-
-    commands.push_back({index - 1, tokens[1]});
-  }
-  return commands;
-}
-
-void CommandStream::close() { _stream.close(); }
 } // namespace writer

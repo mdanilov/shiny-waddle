@@ -2,7 +2,7 @@
 #define GUARD_F6A3E6AA_21F5_4990_85BA_9BE13E67CE35
 
 #include "Command.h"
-#include "command/ICommandStream.h"
+#include "command/FileCommandStream.h"
 
 #include <fstream>
 #include <iostream>
@@ -26,51 +26,20 @@ namespace reader {
  * of the lines to read in the ctr. By default all commands are read.
  *
  */
-class CommandStream : public command::ICommandStream<Command> {
+class CommandStream : public command::FileCommandStream<Command> {
 public:
-  static const uint32_t READ_ALL_COMMANDS = 0xFFFFFFFFU;
-
   /**
-   * \brief Construct a new Command Reader object
+   * \brief Construct a new Command Stream object
    *
    * @param file path to the configuration file
    * @param bufferSize max number of the commands that can be read per step.
    */
   explicit CommandStream(std::string &file,
-                         uint32_t bufferSize = READ_ALL_COMMANDS)
-      : _config(file), _bufferSize(bufferSize), _line(0U) {}
+                         uint32_t bufferSize = command::READ_ALL_COMMANDS)
+      : command::FileCommandStream<Command>(file, bufferSize) {}
 
-  /**
-   * \brief Open the file for reading.
-   *
-   *  @throws std::runtime_error if the file cannot be open
-   */
-  void open() override;
-
-  /**
-   * \brief Read the commands from the file. The number of the commands to read
-   * is specified by the bufferSize parameter.
-   *
-   * The file stream should be opened before. If the file is closed empty array
-   * is returned.
-   *
-   * All invalid commands are skipped.
-   *
-   * @return std::vector<Command> parsed reader commands
-   */
-  std::vector<Command> getCommands() override;
-
-  /**
-   * \brief Close the file stream.
-   *
-   */
-  void close() override;
-
-private:
-  std::string _config;
-  std::ifstream _stream;
-  uint32_t _bufferSize;
-  size_t _line;
+protected:
+  Command parse(const std::string &str) override;
 };
 } // namespace reader
 
