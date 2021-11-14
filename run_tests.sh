@@ -8,5 +8,5 @@ mkdir examples/test/out
 
 if [ $? -eq 0 ]
 then
-    cd build && ctest -C Debug -T test --output-on-failure
+    cd build && ctest -C Debug -T test --output-on-failure --verbose
 fi

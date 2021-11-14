@@ -1,0 +1,29 @@
+@startuml
+
+actor User
+participant LFUCache
+participant FileStorage
+
+User -> LFUCache : readDataByIndex(index)
+alt cache hit
+LFUCache -> LFUCache: read from cache
+else
+LFUCache -> FileStorage: readDataByIndex(index)
+FileStorage -> FileStorage : read value from file
+FileStorage -> LFUCache : ReadResult
+LFUCache -> LFUCache : add value to cache
+end
+LFUCache --> User : ReadResult
+...
+User -> LFUCache : writeDataByIndex(index, value)
+LFUCache -> LFUCache : update value in cache
+LFUCache -> FileStorage: writeDataByIndex(index, value)
+note right
+  It's not possible to change only one line in text file,
+  the whole file will be overwritten
+end note
+FileStorage -> FileStorage : write value to file
+FileStorage -> LFUCache
+LFUCache --> User
+
+@enduml

@@ -81,8 +81,21 @@ There are 2 mutexes, one for the cache memory and another for the file access. T
 the cache, while the writer is writing to the file at the same time. Both mutexes has `shared` type and used in the way that multiple
 reader can access the objects at the same time (shared lock), while there can be only one writer (unique lock).
 
-As mentioned above the cache is implemented using the LFU algorithm. For each `read` access a counter associated with the index is incremented,
-so there is history how many times each index is accessed. And when this counter is greater than the counter of the LFU element in the cache the new element is added to the cache, while the LFU is removed.
+As mentioned above the cache is implemented using the LFU algorithm. For each `read` access a frequency counter associated with
+the cached element is incremented, so there is history how many times cached element is accessed. When new non-cached element
+is read, it will be added to the cache with initial counter 1, while the LFU element is removed from the cache.
+
+### Design
+
+Sequence diagram shows the Reader and Writer execution flows. They started by the `Runner` in a dedicated threads.
+Once the execution is finished the threads are terminated.
+
+![Writer and Reader](uml/images/writer_reader_seq.png)
+
+Sequence diagram shows the cache work. If the value was not cached it will be read from the file by the `FileStorage`.
+Writes always immediately trigger the writing to the `FileStorage`.
+
+![Storage](uml/images/storage_seq.png)
 
 ### Results
 Tests results on randomly generated data with 10 readers, 2 writers and 1000 items.

@@ -1,0 +1,42 @@
+@startuml
+participant Runner
+participant Reader
+participant ReaderCommandStream
+participant Writer
+participant WriterCommandStream
+participant Storage
+
+create control Thread1
+Runner -> Thread1: create
+Thread1 -> Reader: execute()
+Reader -> ReaderCommandStream: open()
+loop commands not empty
+Reader -> ReaderCommandStream: getCommands()
+ReaderCommandStream -> ReaderCommandStream: read commands from file
+ReaderCommandStream --> Reader: commands
+loop for each command
+Reader -> Storage: readByIndex(index)
+Storage --> Reader: ReadResult
+Reader -> Reader: write result to out file
+end
+end
+Reader -> ReaderCommandStream: close()
+Reader --> Thread1 !!
+
+create control Thread2
+Runner -> Thread2: create
+Thread2 -> Writer: execute()
+Writer -> WriterCommandStream: open()
+loop commands not empty
+Writer -> WriterCommandStream: getCommands()
+WriterCommandStream -> WriterCommandStream: read commands from file
+ReaderCommandStream --> Writer: commands
+loop for each command
+Writer -> Storage: writeByIndex(index, value)
+Storage --> Writer
+end
+end
+Writer -> WriterCommandStream: close()
+Writer --> Thread2 !!
+
+@enduml
