@@ -9,6 +9,7 @@
 
 #include "IStorage.h"
 #include "StorageTypes.h"
+#include "util/HashMinHeap.h"
 
 namespace storage {
 /**
@@ -28,16 +29,15 @@ public:
    * @param cache_size the max cache capacity
    */
   LFUCache(IStorage &storage, uint32_t capacity)
-      : _storage(storage), _capacity(capacity) {}
+      : _storage(storage), _cache(capacity) {}
 
   /**
    * \brief Read from underlying storage in case of cache miss. Otherwise take
    * value form the cache.
    *
-   * Increment the frequency counter of accessed element.
+   * Increment the frequency counter of accessed element if it's already cached.
    *
-   * Updates the cache with new element if the counter of accessed element is
-   * greater than the counter of the LFU element from the cache. The LFU element
+   * In case of cache miss updates the cache with new element. The LFU element
    * is removed from the cache.
    *
    * @param index read key
@@ -55,19 +55,18 @@ public:
   void writeByIndex(Index index, const Value &val) override;
 
 private:
-  using Cache = std::unordered_map<Index, Value>;
+  struct CacheEntry {
+    uint64_t freq;
+    Value value;
 
-  bool isFull() const { return _cache.size() >= _capacity; }
+    bool operator>(const CacheEntry &e) const { return freq > e.freq; }
+    bool operator<(const CacheEntry &e) const { return freq < e.freq; }
+  };
 
-  void updateLFU(Index index);
-  void updateFreqHistory(Index index);
-  void cache(Index index, const Value &val);
-  Cache::iterator findLFU();
+  using LFUMinHeap = util::HashMinHeap<Index, CacheEntry>;
 
   IStorage &_storage;
-  uint32_t _capacity;
-  Cache _cache;
-  std::unordered_map<Index, uint64_t> _freq_history;
+  LFUMinHeap _cache;
   mutable std::mutex _mutex;
 };
 } // namespace storage

@@ -30,7 +30,7 @@ TEST(LFUCacheTest, read) {
 
   result = cache.readByIndex(4);
   EXPECT_EQ(result.value, "test");
-  EXPECT_EQ(result.cache_miss, true);
+  EXPECT_EQ(result.cache_miss, false);
 
   for (size_t i = 0; i < 20; ++i) {
     cache.readByIndex(4);
@@ -43,6 +43,10 @@ TEST(LFUCacheTest, read) {
   result = cache.readByIndex(3);
   EXPECT_EQ(result.value, "test");
   EXPECT_EQ(result.cache_miss, true);
+
+  result = cache.readByIndex(3);
+  EXPECT_EQ(result.value, "test");
+  EXPECT_EQ(result.cache_miss, false);
 
   for (size_t i = 0; i < 20; ++i) {
     cache.readByIndex(3);

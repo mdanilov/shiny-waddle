@@ -34,6 +34,11 @@ public:
    * \brief Read from underlying storage in case of cache miss. Otherwise take
    * value form the cache.
    *
+   * Move the already cached element to the front of the cache list.
+   *
+   * In case of cache miss removes LRU element from the cache and add new
+   * element to the front.
+   *
    * @param index read key
    * @return ReadResult contains the true cache miss information.
    */
