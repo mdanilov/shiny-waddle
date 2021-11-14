@@ -10,7 +10,7 @@
 namespace storage {
 LFUCache::Cache::iterator LFUCache::findLFU() {
   uint64_t min_frequency = std::numeric_limits<uint64_t>::max();
-  Cache::iterator res = _cache.end();
+  Cache::iterator res = _cache.begin();
   for (auto it = _cache.begin(); it != _cache.end(); ++it) {
     uint64_t freq = _freq_history[it->first];
     if (freq < min_frequency) {
@@ -45,7 +45,7 @@ void LFUCache::updateFreqHistory(Index index) {
 
 ReadResult LFUCache::readByIndex(Index index) {
   {
-    std::shared_lock<std::shared_timed_mutex> lock(_mutex);
+    std::lock_guard<std::mutex> lock(_mutex);
 
     updateFreqHistory(index);
 
@@ -60,7 +60,7 @@ ReadResult LFUCache::readByIndex(Index index) {
   Value val = _storage.readByIndex(index).value;
 
   {
-    std::shared_lock<std::shared_timed_mutex> lock(_mutex);
+    std::lock_guard<std::mutex> lock(_mutex);
     cache(index, val);
   }
 
@@ -69,7 +69,7 @@ ReadResult LFUCache::readByIndex(Index index) {
 
 void LFUCache::writeByIndex(Index index, const Value &val) {
   {
-    std::unique_lock<std::shared_timed_mutex> lock(_mutex);
+    std::lock_guard<std::mutex> lock(_mutex);
 
     auto it = _cache.find(index);
     if (it != _cache.end()) {

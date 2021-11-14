@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <list>
 #include <queue>
-#include <shared_mutex>
+#include <mutex>
 #include <unordered_map>
 
 #include "IStorage.h"
@@ -66,7 +66,7 @@ private:
   uint32_t _capacity;
   Cache _cache;
   std::unordered_map<Index, uint64_t> _freq_history;
-  mutable std::shared_timed_mutex _mutex;
+  mutable std::mutex _mutex;
 };
 } // namespace storage
 

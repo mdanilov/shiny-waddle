@@ -1,0 +1,49 @@
+# frozen_string_literal: true
+
+EXECUTOR_BIN = File.join(__dir__, "build", "executor")
+TEST_GEN_SCRIPT = File.join(__dir__, "tools", "generate_test.rb")
+
+def test(dir, cache_size)
+  Dir.chdir dir do
+    start = Time.now
+    system("#{EXECUTOR_BIN} #{cache_size} Reader.txt Writer.txt Items.txt")
+    time = Time.now - start
+
+    readers_out = Dir.glob("#{dir}/*.out").sort
+    readers_out.each do |file|
+      disk_count = 0
+      cache_count = 0
+      File.readlines(file).each do |line|
+        disk_count += 1 if line.include? 'Disk'
+        cache_count += 1 if line.include? 'Cache'
+      end
+      puts "#{File.basename(file)}: #{disk_count} Disk, #{cache_count} Cache"
+    end
+    puts "Execution time: #{time} seconds"
+  end
+end
+
+namespace :test do
+  desc "generate new test configuration"
+  task :gen, [:dir] do |_t, args|
+    args.with_defaults(dir: File.join('examples', 'random'))
+    system("ruby #{TEST_GEN_SCRIPT} #{args.dir}")
+  end
+
+  desc "run test on big example"
+  task :big, [:cache_szie] do |_t, args|
+    args.with_defaults(cache_size: 100)
+    dir = File.join(__dir__, "examples", "big")
+    test(dir, args.cache_size)
+  end
+
+  desc "run test on random example"
+  task :random do
+    dir = File.join(__dir__, "examples", "random")
+    [1, 10, 50, 100, 200, 500].each_with_index do |size, index|
+      puts "== Test ##{index + 1}, cache = #{size} =="
+      Rake::Task['test:gen'].invoke
+      test(dir, size)
+    end
+  end
+end

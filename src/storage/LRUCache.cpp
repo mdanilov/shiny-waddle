@@ -28,7 +28,7 @@ void LRUCache::cache(Index index, const Value &val) {
 
 ReadResult LRUCache::readByIndex(Index index) {
   {
-    std::shared_lock<std::shared_timed_mutex> lock(_mutex);
+    std::unique_lock<std::shared_timed_mutex> lock(_mutex);
 
     auto it = _cache.find(index);
     if (it != _cache.end()) {
@@ -42,7 +42,7 @@ ReadResult LRUCache::readByIndex(Index index) {
   Value val = _storage.readByIndex(index).value;
 
   {
-    std::shared_lock<std::shared_timed_mutex> lock(_mutex);
+    std::unique_lock<std::shared_timed_mutex> lock(_mutex);
     cache(index, val);
   }
 
