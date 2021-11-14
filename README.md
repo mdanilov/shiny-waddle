@@ -7,7 +7,8 @@ Implements `In Memory File Cache Design` specified in `task.md`.
 - CMake 3.15.3
 - gcc 9.3.0
 - GTest library (release-1.8.0) is fetched by the CMake
-- (Optional) Ruby to run the integration tests
+- (Optional) `Ruby` to run the integration tests
+- (Optional) `doxygen` package to generate the documentation
 
 C++11 and Linux are the main constraints.
 
@@ -19,48 +20,56 @@ Project structure:
 - **mock** contains interfaces mocks (GMock). Used by unit tests.
 - **src** application sources
 - **test** unit tests
+- **uml** design UML diagrams. All `PlantUML` diagrams are exported to `images`.
 
 All commands needs to be run from the root workspace folder.
 
 ## Build
 Builds the `executor` executable file. The result can be found under `build` folder.
 ```
-./build.sh
+$ ./build.sh
 ```
 
 ## Run tests
-Tests are written using the GTest and to the CMake configuration, those can be run with `ctest`.
-The command below runs build first, and remove all tests output temporary files.
+Tests are written using the `GTest` and added to the `CMake` configuration, those can be run with `ctest`.
+The command below runs build first, and remove all tests output temporary files of previous runs.
 ```
-./run_tests.sh
+$ ./run_tests.sh
 ```
 
 ## Run example
 This command runs `executor` binary with command line arguments of the example from the `task.md`.
 It also builds first and clean-up the workspace from the files of previous runs.
-`Items.txt` file is restored to it's initial state.
+`Items.txt` file is restored to it's initial state. The example is located under `examples/basic` folder.
 ```
-./run_basic_example.sh
+$ ./run_basic_example.sh
 ```
 
-There is `rakefile` (Ruby script) which allows to run the test on random data
+There is also `rakefile` (`Ruby` script) which allows to run the tests on random data.
 ```
-rake test:random # run tests on randomly generated data
-rake test:big # run test on `big` example data
-rake test:gen # generate random test
+# run tests on randomly generated data. Prints results to `stdout`.
+$ rake test:random
+
+# run test on `examples/big` data. Default cache size is 100.
+$ rake test:big
+
+# generate random test. Default output directory is `examples/random`.
+$ rake test:gen
 ```
+
+Use `rake -T` to list all available commands.
 
 ## Generate documentation
 The documentation can be generated using the `Doxygen` command. The output will be in the `doc` folder.
 ```
-doxygen
+$ doxygen
 ```
 
 ## Requirements analysis
 - Statement `Design and implement an efficient eviction mechanism when there is a cache miss.` is unclear.
   The efficient eviction mechanism is depend on the applied use case, which is not specified. So it's not possible
   to implement efficient, but considering `performs caching of frequently accessed items` assume that LFU cache mechanism should be
-  implemented. The final solution will contain both LFU and LRU cache implementations, while LFU cache is default.
+  implemented. The final solution will contain both LFU and LRU cache implementations, while LFU cache is used by default.
 
 - `Handle the case of dirty cache item, where a writer is modifying the item that is already cached.` It does not specify whether
   the writer can change the cache rather than only modifying already existing items, so assume that writer can't remove/add items

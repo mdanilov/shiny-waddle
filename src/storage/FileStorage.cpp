@@ -57,12 +57,15 @@ void FileStorage::writeByIndex(Index index, const Value &val) {
   }
 
   if (std::remove(_file.c_str()) != 0) {
-    std::cout << "Writer: Error while removing the file " << _file << std::endl;
+    std::remove(temp_name.c_str());
+    std::cout << "FileStorage: Error while removing the file " + _file
+              << std::endl;
+    return;
   }
 
   if (std::rename(temp_name.c_str(), _file.c_str()) != 0) {
-    std::cout << "Writer: Error while renaming the file " << temp_name
-              << std::endl;
+    throw std::runtime_error("FileStorage: Error while renaming the file " +
+                             temp_name);
   };
 }
 } // namespace storage
