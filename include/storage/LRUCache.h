@@ -25,10 +25,10 @@ public:
    * \brief Construct a new LRUCache object
    *
    * @param storage reference to storage the access to which will be cached.
-   * @param cache_size the max cache capacity
+   * @param capacity the max cache capacity
    */
-  LRUCache(IStorage &storage, uint32_t cache_size)
-      : _storage(storage), _cache_size(cache_size) {}
+  LRUCache(IStorage &storage, uint32_t capacity)
+      : _storage(storage), _capacity(capacity) {}
 
   /**
    * \brief Read from underlying storage in case of cache miss. Otherwise take
@@ -49,13 +49,17 @@ public:
   void writeByIndex(Index index, const Value &val) override;
 
 private:
-  void updateLRU(Index index);
+  bool isFull() const { return _cache.size() >= _capacity; }
+
+  void updateLRU(Index index, const Value &val);
   void cache(Index index, const Value &val);
 
+  using LRUList = std::list<std::pair<Index, Value>>;
+
   IStorage &_storage;
-  uint32_t _cache_size;
-  std::unordered_map<Index, Value> _cache;
-  std::list<Index> _lru; // store LRU at the front
+  uint32_t _capacity;
+  std::unordered_map<Index, LRUList::iterator> _cache;
+  LRUList _lru; // store LRU at the back
   mutable std::shared_timed_mutex _mutex;
 };
 } // namespace storage

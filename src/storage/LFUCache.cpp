@@ -22,7 +22,7 @@ LFUCache::Cache::iterator LFUCache::findLFU() {
 }
 
 void LFUCache::cache(Index index, const Value &val) {
-  if (_cache.size() >= _capacity) {
+  if (isFull()) {
     auto it = findLFU();
     if (_freq_history[it->first] < _freq_history[index]) {
       // remove LFU from the cache if the new element has higher frequency

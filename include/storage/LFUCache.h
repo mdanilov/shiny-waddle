@@ -3,8 +3,8 @@
 
 #include <cstdint>
 #include <list>
-#include <queue>
 #include <mutex>
+#include <queue>
 #include <unordered_map>
 
 #include "IStorage.h"
@@ -56,6 +56,8 @@ public:
 
 private:
   using Cache = std::unordered_map<Index, Value>;
+
+  bool isFull() const { return _cache.size() >= _capacity; }
 
   void updateLFU(Index index);
   void updateFreqHistory(Index index);

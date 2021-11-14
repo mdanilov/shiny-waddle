@@ -7,23 +7,23 @@
 #include <unordered_map>
 
 namespace storage {
-void LRUCache::updateLRU(Index index) {
-  auto it = std::find(_lru.begin(), _lru.end(), index);
-  if (it != _lru.end()) {
-    _lru.splice(_lru.begin(), _lru, it);
-  }
+void LRUCache::updateLRU(Index index, const Value &val) {
+  _lru.erase(_cache[index]);
+
+  _lru.push_front({index, val});
+  _cache[index] = _lru.begin();
 }
 
 void LRUCache::cache(Index index, const Value &val) {
-  if (_cache.size() >= _cache_size) {
+  if (isFull()) {
     // remove LRU from the cache
-    Index index_to_remove = _lru.back();
+    Index last = _lru.back().first;
     _lru.pop_back();
-    _cache.erase(index_to_remove);
+    _cache.erase(last);
   }
 
-  _cache[index] = val;
-  _lru.push_front(index);
+  _lru.push_front({index, val});
+  _cache[index] = _lru.begin();
 }
 
 ReadResult LRUCache::readByIndex(Index index) {
@@ -33,8 +33,9 @@ ReadResult LRUCache::readByIndex(Index index) {
     auto it = _cache.find(index);
     if (it != _cache.end()) {
       // cache hit
-      updateLRU(index);
-      return {it->second, false};
+      Value val = _cache[index]->second;
+      updateLRU(index, val);
+      return {val, false};
     }
   }
 
@@ -56,7 +57,7 @@ void LRUCache::writeByIndex(Index index, const Value &val) {
     auto it = _cache.find(index);
     if (it != _cache.end()) {
       // update the value in cache
-      _cache[index] = val;
+      updateLRU(index, val);
     }
   }
 
